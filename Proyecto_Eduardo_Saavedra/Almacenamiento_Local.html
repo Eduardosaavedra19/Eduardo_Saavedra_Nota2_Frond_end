@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Almacenamiento Local</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="p-4">
+  <h2>Registros almacenados</h2>
+  <table class="table table-bordered">
+    <thead><tr><th>#</th><th>Nombre</th><th>País</th><th>Teléfono</th><th>Email</th><th>Acciones</th></tr></thead>
+    <tbody id="listado"></tbody>
+  </table>
+
+  <script>
+    function listar(){
+      let items = JSON.parse(localStorage.getItem('contactos')||'[]');
+      let $tbody = $('#listado').empty();
+      items.forEach((c, i) => {
+        $tbody.append(
+          `<tr>
+            <td>${i+1}</td>
+            <td>${c.nombre}</td><td>${c.pais}</td><td>${c.telefono}</td><td>${c.correo}</td>
+            <td>
+              <button class="btn btn-sm btn-info editar" data-i="${i}">Editar</button>
+              <button class="btn btn-sm btn-danger eliminar" data-i="${i}">Eliminar</button>
+            </td>
+          </tr>`
+        );
+      });
+    }
+
+    $(document).ready(function(){
+      listar();
+
+      $('#listado').on('click','.eliminar',function(){
+        let idx = $(this).data('i');
+        let items = JSON.parse(localStorage.getItem('contactos'));
+        items.splice(idx,1);
+        localStorage.setItem('contactos', JSON.stringify(items));
+        listar();
+      });
+
+      $('#listado').on('click','.editar',function(){
+        let idx = $(this).data('i');
+        let items = JSON.parse(localStorage.getItem('contactos'));
+        let c = items[idx];
+        
+        localStorage.setItem('editarIdx', idx);
+        localStorage.setItem('editarData', JSON.stringify(c));
+        window.location.href = 'Contacto.html';
+      });
+    });
+  </script>
+</body>
+</html>
