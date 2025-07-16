@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>JQuery & Países</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body>
+  <div class="container mt-5">
+    <h3 class="mb-3">Ejemplo de carga de países (en español)</h3>
+    <select id="pais-select" class="form-control w-50"></select>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      $.getJSON('https://restcountries.com/v3.1/lang/spanish', function(data) {
+        $('#pais-select').empty();
+        data.sort((a,b) => a.name.common.localeCompare(b.name.common));
+        $.each(data, function(i, country){
+          $('#pais-select').append(
+            $('<option>').val(country.name.common).text(country.name.common)
+          );
+        });
+      }).fail(function(){ alert('Error al cargar países.'); });
+    });
+  </script>
+</body>
+</html>
